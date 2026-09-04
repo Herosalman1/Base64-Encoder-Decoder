@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base64 Magic Space</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #111322;
+            color: #e2e8f0;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .main-wrapper {
+            display: flex;
+            gap: 24px;
+            width: 100%;
+            max-width: 900px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .card {
+            background: #1a1d33;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            flex: 1;
+            min-width: 380px;
+            box-sizing: border-box;
+        }
+        h2 {
+            margin-top: 0;
+            color: #f8fafc;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .input-label {
+            font-size: 13px;
+            color: #94a3b8;
+            margin-bottom: 8px;
+            display: block;
+        }
+        textarea {
+            width: 100%;
+            height: 180px;
+            padding: 12px 14px;
+            background: #111322;
+            border: 1px solid #2a2f4c;
+            border-radius: 8px;
+            color: #f8fafc;
+            font-size: 14px;
+            font-family: monospace;
+            box-sizing: border-box;
+            outline: none;
+            resize: vertical;
+            transition: border-color 0.2s;
+        }
+        textarea:focus {
+            border-color: #6366f1;
+        }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        button {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        .btn-encode {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white;
+            flex: 1;
+        }
+        .btn-decode {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+            flex: 1;
+        }
+        .btn-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .btn-copy {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            flex: 1;
+            padding: 12px;
+        }
+        .btn-clear {
+            background: linear-gradient(135deg, #f472b6, #db2777);
+            color: white;
+            flex: 1;
+            padding: 12px;
+        }
+        .footer {
+            margin-top: 25px;
+            font-size: 12px;
+            color: #64748b;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-wrapper">
+        <!-- Input Card -->
+        <div class="card">
+            <h2>📥 Input Text / Base64</h2>
+            <span class="input-label">Enter data to encode or decode</span>
+            <textarea id="inputText" placeholder="Yahan text ya Base64 string likhein..."></textarea>
+            
+            <div class="btn-group">
+                <button class="btn-encode" onclick="encodeText()">🔐 Encode</button>
+                <button class="btn-decode" onclick="decodeText()">🔓 Decode</button>
+            </div>
+        </div>
+
+        <!-- Output Card -->
+        <div class="card">
+            <h2>📤 Output Result</h2>
+            <span class="input-label">Live Result Preview</span>
+            <textarea id="outputBox" readonly placeholder="Result yahan dikhega..."></textarea>
+            
+            <div class="btn-container">
+                <button class="btn-copy" id="copyBtn" onclick="copyText()">📋 Copy</button>
+                <button class="btn-clear" onclick="clearAll()">🗑️ Clear All</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">Made by : @Herosalman1</div>
+
+    <script>
+        function encodeText() {
+            try {
+                let input = document.getElementById('inputText').value;
+                let encoded = btoa(unescape(encodeURIComponent(input)));
+                document.getElementById('outputBox').value = encoded;
+                document.getElementById('outputBox').style.color = "#f8fafc";
+            } catch (error) {
+                document.getElementById('outputBox').value = "Error: Invalid input for encoding.";
+                document.getElementById('outputBox').style.color = "#f472b6";
+            }
+        }
+
+        function decodeText() {
+            try {
+                let input = document.getElementById('inputText').value.trim();
+                let decoded = decodeURIComponent(escape(atob(input)));
+                document.getElementById('outputBox').value = decoded;
+                document.getElementById('outputBox').style.color = "#f8fafc";
+            } catch (error) {
+                document.getElementById('outputBox').value = "Error: Invalid Base64 string.";
+                document.getElementById('outputBox').style.color = "#f472b6";
+            }
+        }
+
+        function clearAll() {
+            document.getElementById('inputText').value = '';
+            document.getElementById('outputBox').value = '';
+            document.getElementById('outputBox').style.color = "#94a3b8";
+        }
+
+        function copyText() {
+            let outputBox = document.getElementById('outputBox');
+            let textToCopy = outputBox.value;
+            
+            if (!textToCopy || textToCopy.startsWith("Error")) {
+                return;
+            }
+
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                let btn = document.getElementById('copyBtn');
+                let originalText = btn.innerHTML;
+                btn.innerHTML = "✨ Copied!";
+                btn.style.background = "linear-gradient(135deg, #10b981, #059669)";
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.background = "linear-gradient(135deg, #3b82f6, #2563eb)";
+                }, 2000);
+            });
+        }
+    </script>
+
+</body>
+</html>
