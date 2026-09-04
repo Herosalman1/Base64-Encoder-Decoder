@@ -16,13 +16,14 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            overflow-x: auto;
         }
         .main-wrapper {
             display: flex;
             gap: 24px;
             width: 100%;
             max-width: 900px;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
             justify-content: center;
         }
         .card {
@@ -31,8 +32,7 @@
             padding: 25px;
             border-radius: 16px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-            flex: 1;
-            min-width: 380px;
+            flex: 0 0 420px;
             box-sizing: border-box;
         }
         h2 {
